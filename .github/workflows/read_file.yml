@@ -9,11 +9,11 @@ jobs:
        runs-on: windows-latest
 
        steps:
-           -name: checkout repository
-            uses: actions/checkout@v3
+           - name: checkout repository
+             uses: actions/checkout@v3
 
-           -name: Display sample.txt content
-            run: |
+           - name: Display sample.txt content
+             run: |
                echo "----------Content of sample.txt----------"
                cat sample.txt
                echo "-----------------------------------------"
