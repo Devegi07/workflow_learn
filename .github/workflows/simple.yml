@@ -25,6 +25,7 @@ jobs:
         uses: actions/download-artifact@v4
         with:
           name: build-file
+          path: .
 
       - name: Test the file
         run: |
@@ -40,4 +41,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy step
-        run: echo "Deploying..."
+        run: echo "Deploying your app..."
