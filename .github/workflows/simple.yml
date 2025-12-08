@@ -3,29 +3,35 @@ name: Simple CI
 on:
   push:
     branches: ["main"]
-  pull_request:
-    branches: ["main"]
-
-env:
-  APP: MyApp
 
 jobs:
   build:
     runs-on: self-hosted
     steps:
-      - name: Create output text
-        run: echo "Hello from build job" > output.txt
+      - name: Create output file
+        run: echo "Hello" > output.txt
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: build-file
+          path: output.txt
 
   test:
     needs: build
     runs-on: self-hosted
     steps:
-      - name: Test the output file
+      - name: Download artifact
+        uses: actions/download-artifact@v3
+        with:
+          name: build-file
+
+      - name: Test the file
         run: |
           if grep -q "Hello" output.txt; then
-            echo "Test Passed!"
+            echo "Test passed!"
           else
-            echo "Test Failed!"
+            echo "Test failed!"
             exit 1
           fi
 
@@ -33,5 +39,5 @@ jobs:
     needs: test
     runs-on: self-hosted
     steps:
-      - name: Deploy (just printing for demo)
-        run: echo "Deploying $APP"
+      - name: Deploy step
+        run: echo "Deploying..."
