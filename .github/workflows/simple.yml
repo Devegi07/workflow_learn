@@ -1,0 +1,37 @@
+name: Simple CI
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+
+env:
+  APP: MyApp
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Create output text
+        run: echo "Hello from build job" > output.txt
+
+  test:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Test the output file
+        run: |
+          if grep -q "Hello" output.txt; then
+            echo "Test Passed!"
+          else
+            echo "Test Failed!"
+            exit 1
+          fi
+
+  deploy:
+    needs: test
+    runs-on: self-hosted
+    steps:
+      - name: Deploy (just printing for demo)
+        run: echo "Deploying $APP"
