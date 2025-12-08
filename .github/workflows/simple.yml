@@ -11,14 +11,14 @@ env:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Create output text
         run: echo "Hello from build job" > output.txt
 
   test:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Test the output file
         run: |
@@ -31,7 +31,7 @@ jobs:
 
   deploy:
     needs: test
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
       - name: Deploy (just printing for demo)
         run: echo "Deploying $APP"
