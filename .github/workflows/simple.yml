@@ -1,0 +1,41 @@
+name: Simple CI
+on:
+  push:
+     branches: ["main"]
+  pull_request:
+     branches: ["feature_2"]
+
+env:
+  APP: MyApp
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+      - name: Create a build file
+        run: echo "This is build output" > build.txt
+
+  test:
+    needs: build
+    runs-on:  self-hosted
+    steps:
+      - name: Check if build file exists
+        run: |
+          if [ -f build.txt ]; then
+            echo "Test passed: build file found"
+          else
+            echo "Test failed: file missing"
+            exit 1
+          fi
+
+  deploy:
+    needs: test
+    runs-on:  self-hosted
+    if: github.event_name == 'push'
+    steps:
+      - name: Move build file to deploy folder
+        run: |
+          mkdir deploy
+          mv build.txt deploy/
+          echo "File deployed to deploy folder"
+         
