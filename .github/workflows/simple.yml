@@ -1,41 +1,37 @@
 name: Simple CI
+
 on:
   push:
-     branches: ["main"]
+    branches: ["main"]
   pull_request:
-     branches: ["feature_2"]
+    branches: ["main"]
 
 env:
   APP: MyApp
 
 jobs:
   build:
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - name: Create a build file
-        run: echo "This is build output" > build.txt
+      - name: Create output text
+        run: echo "Hello from build job" > output.txt
 
   test:
     needs: build
-    runs-on:  self-hosted
+    runs-on: ubuntu-latest
     steps:
-      - name: Check if build file exists
+      - name: Test the output file
         run: |
-          if [ -f build.txt ]; then
-            echo "Test passed: build file found"
+          if grep -q "Hello" output.txt; then
+            echo "Test Passed!"
           else
-            echo "Test failed: file missing"
+            echo "Test Failed!"
             exit 1
           fi
 
   deploy:
     needs: test
-    runs-on:  self-hosted
-    if: github.event_name == 'push'
+    runs-on: ubuntu-latest
     steps:
-      - name: Move build file to deploy folder
-        run: |
-          mkdir deploy
-          mv build.txt deploy/
-          echo "File deployed to deploy folder"
-         
+      - name: Deploy (just printing for demo)
+        run: echo "Deploying $APP"
