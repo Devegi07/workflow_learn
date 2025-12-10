@@ -1,12 +1,11 @@
 name: Read Sample File
 
 on:
-  push:
-    branches: ["main"]
+  workflow_dispatch
 
 jobs:
    show-file:
-       runs-on: windows-latest
+       runs-on: self- hosted
 
        steps:
            - name: checkout repository
